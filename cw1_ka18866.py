@@ -125,15 +125,12 @@ def splitup(xs, ys):
         best_temp_check = min([error1, error2, error3])
         if best_temp_check == error1:
             best_fit_temp = best_fit_linear[:, num_segments - 1]
-            print(error1)
             print("linear")
         elif best_temp_check == error2:
             best_fit_temp = best_fit_poly[:, num_segments - 1]
-            print(error2)
             print("cubic")
         elif best_temp_check == error3:
             best_fit_temp = best_fit_sin[:, num_segments - 1]
-            print(error3)
             print("sin")
 
         best_fit = np.hstack((best_fit, np.reshape(best_fit_temp, (20, 1))))
@@ -141,7 +138,6 @@ def splitup(xs, ys):
         min_error = min_error + best_temp_check
 
     # Showing the graph with data points and line
-    view_data_segments(xs, ys, best_fit)
     print(min_error)
     return best_fit
 
@@ -155,7 +151,10 @@ def error(ys, line):
 
 def main(filename):
     test = load_points_from_file(filename)
-    bestfitline = splitup(test[0], test[1])
+    best_fit = splitup(test[0], test[1])
+    if len(sys.argv) == 3:
+        if sys.argv[2] == "--plot":
+            view_data_segments(test[0], test[1], best_fit)
 
 
-test = main("train_data/basic_5.csv")
+main(sys.argv[1])
